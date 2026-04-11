@@ -37,34 +37,34 @@ The VageChain architecture is functionally decoupled but horizontally integrated
 - **State Layer (Verkle Trees):** Replaces legacy Merkle Patricia Tries (MPT) with Vector Commitment-based Verkle trees for $O(1)$ proof sizes.
 
 
-          +---------------------+
-          |   Wallet / dApps    |
-          |  (Metamask / Web3)  |
-          +----------+----------+
-                     |
-                 JSON-RPC
-                     |
-          +----------v----------+
-          |       RPC Node      |
-          +----------+----------+
-                     |
-              P2P Gossip Layer
-                     |
-     +---------------+----------------+
-     |                                |
-+----v----+                   +-------v------+
-| Mempool |                   |  Consensus   |
-|Commit   |                   |  HotStuff    |
-|Reveal   |                   +-------+------+
-+----+----+                           |
-     |                                |
-     +----------+-----------+---------+
-                |           |
-        +-------v---+  +----v------+
-        | Parallel  |  | Verkle    |
-        | Execution |  | State     |
-        | Engine    |  | Storage   |
-        +-----------+  +-----------+
+                +---------------------+
+                |   Wallet / dApps    |
+                |  (Metamask / Web3)  |
+                +----------+----------+
+                           |
+                        JSON-RPC
+                           |
+                +----------v----------+
+                |       RPC Node      |
+                +----------+----------+
+                           |
+                    P2P Gossip Layer
+                           |
+           +---------------v----------------+
+           |                                |
+      +----v----+                   +-------v------+
+      | Mempool |                   |  Consensus   |
+      |Commit   |                   |  HotStuff    |
+      |Reveal   |                   +-------+------+
+      +----+----+                           |
+           |                                |
+           +----------+-----------+---------+
+                      |           |
+              +-------v---+  +----v------+
+              | Parallel  |  | Verkle    |
+              | Execution |  | State     |
+              | Engine    |  | Storage   |
+              +-----------+  +-----------+
 
 
 ### 🛡️ Native MEV Protection: Commit-Reveal Cryptography

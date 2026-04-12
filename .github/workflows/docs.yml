@@ -178,6 +178,7 @@ jobs:
       
       - name: Generate documentation summary
         run: |
+          mkdir -p docs
           cat > docs/DOCUMENTATION_INDEX.md << 'EOF'
           # VAGE Documentation Index
           

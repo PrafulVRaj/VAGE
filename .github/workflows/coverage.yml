@@ -94,7 +94,7 @@ jobs:
           key: ${{ runner.os }}-cargo-llvm-${{ hashFiles('**/Cargo.lock') }}
       
       - name: Generate coverage (LLVM)
-        run: cd vage && cargo +nightly llvm-cov --workspace --lcov --output-path lcov.info --timeout 600
+        run: cd vage && cargo +nightly llvm-cov --workspace --lcov --output-path lcov.info
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

@@ -265,6 +265,85 @@ impl Block {
 
 // Removed Canonical impl
 
+/// High-level builder for assembling blocks during consensus or execution.
+pub struct BlockBuilder {
+    pub header: BlockHeader,
+    pub body: BlockBody,
+}
+
+impl BlockBuilder {
+    /// Create a new block builder starting from a parent block header.
+    pub fn new(parent_header: &BlockHeader) -> Self {
+        let mut header = BlockHeader::new(parent_header.hash(), parent_header.height + 1);
+        header.set_timestamp(parent_header.timestamp + 1); // Minimum possible timestamp increment
+
+        Self {
+            header,
+            body: BlockBody::new(),
+        }
+    }
+
+    /// Add a transaction to the block being built.
+    pub fn add_transaction(&mut self, tx: vage_types::Transaction) {
+        self.body.add_transaction(tx);
+    }
+
+    /// Add a transaction receipt to the block being built.
+    pub fn add_receipt(&mut self, receipt: vage_types::Receipt) {
+        self.body.add_receipt(receipt);
+    }
+
+    /// Update the block timestamp.
+    pub fn set_timestamp(&mut self, ts: vage_types::Timestamp) {
+        self.header.set_timestamp(ts);
+    }
+
+    /// Update the block proposer address.
+    pub fn set_proposer(&mut self, proposer: vage_types::Address) {
+        self.header.proposer = proposer;
+    }
+
+    /// Update the block's state root commitment.
+    pub fn set_state_root(&mut self, state_root: Hash) {
+        self.header.set_state_root(state_root);
+    }
+
+    pub fn set_zk_validity_proof(&mut self, proof: Vec<u8>) {
+        self.header.set_zk_proof(proof);
+    }
+
+    /// Build the block by computing all necessary Merkle roots and returning a Block.
+    pub fn build(mut self) -> Block {
+        // Automatically compute Merkle roots for the header
+        let tx_root = self.body.compute_tx_root();
+        let receipt_root = self.body.compute_receipt_root();
+
+        self.header.set_tx_root(tx_root);
+        self.header.set_receipts_root(receipt_root);
+
+        Block {
+            header: self.header,
+            body: self.body,
+        }
+    }
+
+    /// Sign the building block and return the finalized Block.
+    pub fn sign(self, signing_key: &ed25519_dalek::SigningKey) -> Result<Block> {
+        let mut block = self.build();
+        block.header.sign(signing_key)?;
+        Ok(block)
+    }
+
+    /// Perform pre-build integrity and safety checks on the assembling block components.
+    pub fn validate_before_commit(&self) -> Result<()> {
+        if self.body.transaction_count() == 0 {
+            // Usually, empty blocks are allowed for consensus heartbeats, but can be checked.
+        }
+        self.header.validate_basic()?;
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Block;
@@ -359,84 +438,5 @@ mod tests {
         assert!(block
             .verify_header_signature(&public_key)
             .expect("verification should succeed"));
-    }
-}
-
-/// High-level builder for assembling blocks during consensus or execution.
-pub struct BlockBuilder {
-    pub header: BlockHeader,
-    pub body: BlockBody,
-}
-
-impl BlockBuilder {
-    /// Create a new block builder starting from a parent block header.
-    pub fn new(parent_header: &BlockHeader) -> Self {
-        let mut header = BlockHeader::new(parent_header.hash(), parent_header.height + 1);
-        header.set_timestamp(parent_header.timestamp + 1); // Minimum possible timestamp increment
-
-        Self {
-            header,
-            body: BlockBody::new(),
-        }
-    }
-
-    /// Add a transaction to the block being built.
-    pub fn add_transaction(&mut self, tx: vage_types::Transaction) {
-        self.body.add_transaction(tx);
-    }
-
-    /// Add a transaction receipt to the block being built.
-    pub fn add_receipt(&mut self, receipt: vage_types::Receipt) {
-        self.body.add_receipt(receipt);
-    }
-
-    /// Update the block timestamp.
-    pub fn set_timestamp(&mut self, ts: vage_types::Timestamp) {
-        self.header.set_timestamp(ts);
-    }
-
-    /// Update the block proposer address.
-    pub fn set_proposer(&mut self, proposer: vage_types::Address) {
-        self.header.proposer = proposer;
-    }
-
-    /// Update the block's state root commitment.
-    pub fn set_state_root(&mut self, state_root: Hash) {
-        self.header.set_state_root(state_root);
-    }
-
-    pub fn set_zk_validity_proof(&mut self, proof: Vec<u8>) {
-        self.header.set_zk_proof(proof);
-    }
-
-    /// Build the block by computing all necessary Merkle roots and returning a Block.
-    pub fn build(mut self) -> Block {
-        // Automatically compute Merkle roots for the header
-        let tx_root = self.body.compute_tx_root();
-        let receipt_root = self.body.compute_receipt_root();
-
-        self.header.set_tx_root(tx_root);
-        self.header.set_receipts_root(receipt_root);
-
-        Block {
-            header: self.header,
-            body: self.body,
-        }
-    }
-
-    /// Sign the building block and return the finalized Block.
-    pub fn sign(self, signing_key: &ed25519_dalek::SigningKey) -> Result<Block> {
-        let mut block = self.build();
-        block.header.sign(signing_key)?;
-        Ok(block)
-    }
-
-    /// Perform pre-build integrity and safety checks on the assembling block components.
-    pub fn validate_before_commit(&self) -> Result<()> {
-        if self.body.transaction_count() == 0 {
-            // Usually, empty blocks are allowed for consensus heartbeats, but can be checked.
-        }
-        self.header.validate_basic()?;
-        Ok(())
     }
 }

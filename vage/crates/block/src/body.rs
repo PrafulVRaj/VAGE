@@ -9,6 +9,12 @@ pub struct BlockBody {
     pub receipts: Vec<Receipt>,
 }
 
+impl Default for BlockBody {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BlockBody {
     /// Create a new block body.
     pub fn new() -> Self {

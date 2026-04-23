@@ -2,64 +2,64 @@
 # See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Root files and overall project
-* @your-github-handle
+* @VageChain
 
 # Build and release
-/.github/ @your-github-handle
-/vage/Cargo.toml @your-github-handle
-/vage/Cargo.lock @your-github-handle
-rust-toolchain.toml @your-github-handle
-devnet_start.sh @your-github-handle
-devnet_start.ps1 @your-github-handle
+/.github/ @VageChain
+/vage/Cargo.toml @VageChain
+/vage/Cargo.lock @VageChain
+rust-toolchain.toml @VageChain
+devnet_start.sh @VageChain
+devnet_start.ps1 @VageChain
 
 # Documentation
-/docs/ @your-github-handle
-README.md @your-github-handle
-/vage/LICENSE @your-github-handle
+/docs/ @VageChain
+README.md @VageChain
+/vage/LICENSE @VageChain
 
 # Core consensus implementation
-/vage/crates/consensus/ @your-github-handle
+/vage/crates/consensus/ @VageChain
 
 # Execution and state
-/vage/crates/execution/ @your-github-handle
-/vage/crates/state/ @your-github-handle
-/vage/crates/storage/ @your-github-handle
+/vage/crates/execution/ @VageChain
+/vage/crates/state/ @VageChain
+/vage/crates/storage/ @VageChain
 
 # Cryptography and security
-/vage/crates/crypto/ @your-github-handle
+/vage/crates/crypto/ @VageChain
 
 # Networking
-/vage/crates/networking/ @your-github-handle
-/vage/crates/mempool/ @your-github-handle
+/vage/crates/networking/ @VageChain
+/vage/crates/mempool/ @VageChain
 
 # RPC and APIs
-/vage/crates/rpc/ @your-github-handle
+/vage/crates/rpc/ @VageChain
 
 # Zero-knowledge proofs
-/vage/crates/zk/ @your-github-handle
+/vage/crates/zk/ @VageChain
 
 # Node implementation
-/vage/bin/node/ @your-github-handle
-/vage/crates/node/ @your-github-handle
+/vage/bin/node/ @VageChain
+/vage/crates/node/ @VageChain
 
 # CLI tools
-/vage/bin/cli/ @your-github-handle
+/vage/bin/cli/ @VageChain
 
 # Network configuration and validators
-/vage/network/ @your-github-handle
-/vage/validators/ @your-github-handle
+/vage/network/ @VageChain
+/vage/validators/ @VageChain
 
 # Configuration files
-/vage/configs/ @your-github-handle
+/vage/configs/ @VageChain
 
 # Tests
-/vage/tests/ @your-github-handle
+/vage/tests/ @VageChain
 
 # Monitoring
-/monitoring/ @your-github-handle
+/monitoring/ @VageChain
 
 # Docker
-/vage/docker/ @your-github-handle
+/vage/docker/ @VageChain
 
 # Scripts
-/scripts/ @your-github-handle
+/scripts/ @VageChain
